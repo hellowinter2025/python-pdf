@@ -1,12 +1,20 @@
 # PDF 压缩工具
 
-一个基于 Python、pikepdf、Pillow 和 CustomTkinter 的本地 PDF 压缩工具。
+一个本地运行的 PDF 压缩工具，基于 Python、pikepdf、Pillow 和 CustomTkinter 构建。
+
+## 纯 AI 编程声明
+
+本项目为纯 AI 编程项目：代码实现、GUI 美化、文档整理和 Git 仓库初始化均由 AI 编程完成。
+
+- AI 编程工具：OpenAI Codex
+- 使用模型：GPT-5
+- 人类参与：提出需求、验收方向和运行结果判断
 
 ## 功能
 
 - 按 JPEG 质量批量压缩 PDF 内嵌图片
 - 按目标大小自动探测压缩参数
-- 保留文字、矢量内容、页面结构
+- 在保留文字、矢量内容和页面结构的前提下降低图片体积
 - 支持文件夹递归添加和拖拽添加
 - 支持自定义输出目录、覆盖策略和 `_compressed` 文件名后缀
 
