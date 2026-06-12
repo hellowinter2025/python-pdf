@@ -35,7 +35,7 @@ from PIL import Image
 from pdf_compress import compress_pdf, compress_pdf_to_target, format_size, parse_size
 
 # 设置外观
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
 
 # ======================================================================
@@ -43,29 +43,29 @@ ctk.set_default_color_theme("blue")
 # ======================================================================
 
 class Theme:
-    BG = "#0b1020"
-    BG2 = "#11182b"
-    BG3 = "#17213a"
-    SURFACE = "#1d2945"
-    SURFACE_HOVER = "#263653"
-    PRIMARY = "#3b82f6"
-    PRIMARY_HOVER = "#60a5fa"
-    PRIMARY_DARK = "#1d4ed8"
-    ACCENT = "#14b8a6"
-    ACCENT2 = "#f59e0b"
-    SUCCESS = "#34d399"
-    WARNING = "#fbbf24"
-    ERROR = "#fb7185"
-    TEXT = "#f8fafc"
-    TEXT2 = "#cbd5e1"
-    TEXT3 = "#7f8da3"
-    BORDER = "#263247"
-    CARD = "#11182b"
-    INPUT_BG = "#0f172a"
+    BG = "#f3f6fb"
+    BG2 = "#ffffff"
+    BG3 = "#eef3fb"
+    SURFACE = "#dbe7f5"
+    SURFACE_HOVER = "#c6d8ef"
+    PRIMARY = "#2563eb"
+    PRIMARY_HOVER = "#1d4ed8"
+    PRIMARY_DARK = "#0f3aa7"
+    ACCENT = "#0f766e"
+    ACCENT2 = "#d97706"
+    SUCCESS = "#059669"
+    WARNING = "#d97706"
+    ERROR = "#e11d48"
+    TEXT = "#0f172a"
+    TEXT2 = "#334155"
+    TEXT3 = "#64748b"
+    BORDER = "#d7e0ec"
+    CARD = "#ffffff"
+    INPUT_BG = "#ffffff"
     PROGRESS = "#3b82f6"
-    DIVIDER = "#263247"
-    ROW = "#17213a"
-    ROW_ALT = "#1a2540"
+    DIVIDER = "#d7e0ec"
+    ROW = "#f8fbff"
+    ROW_ALT = "#edf3fb"
 
 
 # ======================================================================
@@ -73,7 +73,7 @@ class Theme:
 # ======================================================================
 
 def _make_icon():
-    """生成一个简易 PDF 图标（蓝色渐变 + 白色 PDF 文字），返回 base64 字符串"""
+    """Generate this app's custom PDF compressor icon as a PNG data string."""
     from PIL import Image, ImageDraw, ImageFont
     import io
 
@@ -81,31 +81,34 @@ def _make_icon():
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    # 背景：圆角矩形，蓝紫渐变
-    r = 32
-    draw.rounded_rectangle([16, 16, size - 16, size - 16], radius=r, fill="#4361ee")
+    # Soft app tile.
+    draw.rounded_rectangle([14, 14, 242, 242], radius=48, fill="#dbeafe")
+    draw.rounded_rectangle([24, 24, 232, 232], radius=40, outline="#93c5fd", width=3)
 
-    # 右上角折角
-    fold = 48
-    draw.polygon([(size - 16 - fold, 16), (size - 16, 16), (size - 16, 16 + fold)], fill="#3a0ca3")
+    # Document body and folded corner.
+    doc = [66, 42, 190, 218]
+    draw.rounded_rectangle(doc, radius=14, fill="#ffffff", outline="#bfdbfe", width=3)
+    draw.polygon([(154, 42), (190, 78), (154, 78)], fill="#e0f2fe", outline="#bfdbfe")
+    draw.line([(154, 42), (154, 78), (190, 78)], fill="#bfdbfe", width=3)
 
-    # PDF 文字
+    # Compact text lines, suggesting preserved text content.
+    for y, w in [(104, 80), (120, 66), (136, 84), (152, 58)]:
+        draw.rounded_rectangle([86, y, 86 + w, y + 6], radius=3, fill="#cbd5e1")
+
+    # Compression mark: two blue blocks becoming one teal line.
+    draw.rounded_rectangle([82, 176, 122, 190], radius=5, fill="#2563eb")
+    draw.rounded_rectangle([134, 176, 174, 190], radius=5, fill="#60a5fa")
+    draw.line([(92, 202), (166, 202)], fill="#0f766e", width=7)
+    draw.polygon([(166, 202), (150, 192), (150, 212)], fill="#0f766e")
+
+    # PDF badge.
+    draw.rounded_rectangle([50, 58, 122, 92], radius=10, fill="#2563eb")
     try:
-        font = ImageFont.truetype("arial.ttf", 72)
+        font = ImageFont.truetype("arialbd.ttf", 22)
     except Exception:
         font = ImageFont.load_default()
     text = "PDF"
-    bbox = draw.textbbox((0, 0), text, font=font)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    tx = (size - tw) // 2
-    ty = (size - th) // 2 + 10
-    draw.text((tx, ty), text, fill="white", font=font)
-
-    # 压缩箭头
-    arrow_y = size - 70
-    draw.line([(60, arrow_y), (size - 60, arrow_y)], fill="white", width=5)
-    draw.line([(60, arrow_y), (80, arrow_y - 18)], fill="white", width=5)
-    draw.line([(60, arrow_y), (80, arrow_y + 18)], fill="white", width=5)
+    draw.text((66, 62), text, fill="#ffffff", font=font)
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
